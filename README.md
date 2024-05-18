@@ -1,3 +1,5 @@
 # Express Prometheus Demo
 
-![Application server arch](application-prom-arch.png){:width="20%"}
+<p align="center">
+  <img src="application-prom-arch.png" alt="Application server arch" width="400"/>
+</p>
