@@ -20,9 +20,9 @@ const apiResponseTimeMetricMiddleware = (
   })(req, res, next);
 };
 
-app.use('/reservations', reservationRoutes);
-
 app.use(apiResponseTimeMetricMiddleware);
+
+app.use(reservationRoutes);
 
 app.get('/', (req, res) => {
   res.send('Welcome to Hotel reservation API!');
