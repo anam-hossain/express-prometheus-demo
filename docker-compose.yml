@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app-server:
+    image: node:18
+    working_dir: /usr/app
+    volumes:
+      - .:/usr/app
+    env_file:
+      - ./.env
+    command: bash -c "npm install && npm run build && node dist/server.js"
+    ports:
+      - "3000:3000"
+      - "9100:9100"
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - app-server
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./provisioning:/etc/grafana/provisioning
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+
+volumes:
+  grafana-data:
