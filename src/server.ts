@@ -1,10 +1,13 @@
 import app from './app';
-import { startMetricServer } from './metrics';
+import metricsApp from './metrics';
 
-const port = process.env.PORT || 3000;
+const appPort = process.env.PORT || 3000;
+const metricPort = process.env.METRIC_PORT || 9100;
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+metricsApp.listen(metricPort, () => {
+  console.log(`Metric server is running on port ${metricPort}`);
+});
 
-  startMetricServer();
+app.listen(appPort, () => {
+  console.log(`App Server is running on port ${appPort}`);
 });

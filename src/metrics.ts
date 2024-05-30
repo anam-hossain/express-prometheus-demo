@@ -1,23 +1,17 @@
-import express from 'express';
-import client from 'prom-client';
+import express, { Express } from 'express';
+import promBundle from 'express-prom-bundle';
 
 const app = express();
 
-const metricPort = process.env.METRIC_PORT || 9100;
-
-export const startMetricServer = () => {
-  const collectDefaultMetrics = client.collectDefaultMetrics;
-
-  collectDefaultMetrics();
-
-  app.get('/metrics', async (req, res) => {
-    res.set('Content-Type', client.register.contentType);
-
-    return res.send(await client.register.metrics());
+export const registerMetricsMiddleware = (app: Express, metricsApp: Express) => {
+  const metricsMiddleware = promBundle({ 
+    includeMethod: true,
+    autoregister: false,
+    metricsApp,
   });
-
-  app.listen(metricPort, () => {
-    console.log(`Metric server is running on port ${metricPort}`);
-  });
+  
+  app.use(metricsMiddleware);
 };
+
+export default app;
 
